@@ -16,6 +16,6 @@ public class ServicoRequestDTO {
     @Min(value = 20)
     private Integer duracaoMinutos;
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User profissional_id;
+    @JoinColumn(name = "profissional_id")
+    private User profissional;
 }
