@@ -34,4 +34,13 @@ public class AgendamentoMapper {
         agendamento.setStatus(requestDTO.getStatus());
         return agendamento;
     }
+
+    public static void updateEntity(Agendamento agendamento, AgendamentoRequestDTO requestDTO) {
+        if (requestDTO == null || agendamento == null) {
+            return;
+        }
+        agendamento.setDataHoraInicio(requestDTO.getDataHoraInicio());
+        agendamento.setDataHoraFim(requestDTO.getDataHoraFim());
+        agendamento.setStatus(requestDTO.getStatus());
+    }
 }
