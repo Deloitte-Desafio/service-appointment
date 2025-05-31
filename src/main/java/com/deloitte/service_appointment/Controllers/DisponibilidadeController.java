@@ -42,7 +42,7 @@ public class DisponibilidadeController {
         return ResponseEntity.ok(disponibilidadeResponseDTO);
     }
 
-    @DeleteMapping("/id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         disponibilidadeService.delete(id);
         return ResponseEntity.noContent().build();
