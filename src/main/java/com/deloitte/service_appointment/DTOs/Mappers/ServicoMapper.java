@@ -7,23 +7,37 @@ import com.deloitte.service_appointment.Entities.User;
 
 public class ServicoMapper {
 
-    public static Servico toEntity(ServicoRequestDTO dto){
-        Servico servico = new Servico();
-        servico.setNome(dto.getNome());
-        servico.setDescricao(dto.getDescricao());
-        servico.setDuracaoMinutos(dto.getDuracaoMinutos());
-        servico.setProfissional_id(dto.getProfissional_id());
+    public static ServicoResponseDTO toDTO(Servico servico) {
+        if (servico == null) {
+            return null;
+        }
+        Long profissionalId = servico.getProfissional() != null ? servico.getProfissional().getId() : null;
+        return new ServicoResponseDTO(
+                servico.getId(),
+                servico.getNome(),
+                servico.getDescricao(),
+                servico.getDuracaoMinutos(),
+                profissionalId
+        );
+    }
 
+    public static Servico toEntity(ServicoRequestDTO servicoRequestDTO) {
+        if (servicoRequestDTO == null) {
+            return null;
+        }
+        Servico servico = new Servico();
+        servico.setNome(servicoRequestDTO.getNome());
+        servico.setDescricao(servicoRequestDTO.getDescricao());
+        servico.setDuracaoMinutos(servicoRequestDTO.getDuracaoMinutos());
         return servico;
     }
 
-    public static ServicoResponseDTO toDTO(Servico servico){
-        ServicoResponseDTO dto = new ServicoResponseDTO();
-        dto.setId(servico.getId());
-        dto.setNome(servico.getNome());
-        dto.setDescricao(servico.getDescricao());
-        dto.setDuracaoMinutos(servico.getDuracaoMinutos());
-        dto.setProfissional_id(servico.getProfissional_id());
-        return dto;
+    public static void updateEntity(Servico servico, ServicoRequestDTO servicoRequestDTO) {
+        if (servicoRequestDTO == null || servico == null) {
+            return;
+        }
+        servico.setNome(servicoRequestDTO.getNome());
+        servico.setDescricao(servicoRequestDTO.getDescricao());
+        servico.setDuracaoMinutos(servicoRequestDTO.getDuracaoMinutos());
     }
 }
