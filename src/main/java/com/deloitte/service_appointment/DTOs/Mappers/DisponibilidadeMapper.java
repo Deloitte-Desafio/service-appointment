@@ -2,7 +2,9 @@ package com.deloitte.service_appointment.DTOs.Mappers;
 
 import com.deloitte.service_appointment.DTOs.DisponibilidadeRequestDTO;
 import com.deloitte.service_appointment.DTOs.DisponibilidadeResponseDTO;
+import com.deloitte.service_appointment.DTOs.ServicoRequestDTO;
 import com.deloitte.service_appointment.Entities.Disponibilidade;
+import com.deloitte.service_appointment.Entities.Servico;
 
 public class DisponibilidadeMapper {
     public static DisponibilidadeResponseDTO toDTO(Disponibilidade disponibilidade) {
@@ -28,5 +30,14 @@ public class DisponibilidadeMapper {
         disponibilidade.setHoraInicio(dto.getHoraInicio());
         disponibilidade.setHoraFim(dto.getHoraFim());
         return disponibilidade;
+    }
+
+    public static void updateEntity(Disponibilidade disponibilidade, DisponibilidadeRequestDTO disponibilidadeRequestDTO) {
+        if (disponibilidadeRequestDTO == null || disponibilidade == null) {
+            return;
+        }
+        disponibilidade.setDiaDaSemana(disponibilidadeRequestDTO.getDiaDaSemana());
+        disponibilidade.setHoraFim(disponibilidadeRequestDTO.getHoraFim());
+        disponibilidade.setHoraInicio(disponibilidadeRequestDTO.getHoraInicio());
     }
 }
