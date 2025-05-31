@@ -1,4 +1,4 @@
-package com.deloitte.service_appointment.Services.ServiceImpl;
+package com.deloitte.service_appointment.Services.Impl;
 
 import com.deloitte.service_appointment.DTOs.Mappers.UserMapper;
 import com.deloitte.service_appointment.DTOs.UserRequestDTO;
