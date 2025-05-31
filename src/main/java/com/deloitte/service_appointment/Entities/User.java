@@ -1,10 +1,7 @@
 package com.deloitte.service_appointment.Entities;
 
 import com.deloitte.service_appointment.enums.UserType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,19 +11,23 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table
+@Table( name = "tb_user")
 @Entity
 public class User {
 
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    private String nome;
 
-    private String description;
+    private String email;
 
-    private String password;
+    private String senha;
 
-    private UserType type;
+    private UserType tipoUsuario;
+
+
+
 
 }
