@@ -1,7 +1,9 @@
 package com.deloitte.service_appointment.Services;
 
+import com.deloitte.service_appointment.DTOs.User.UserUpdateDTO;
 import com.deloitte.service_appointment.DTOs.UserRequestDTO;
 import com.deloitte.service_appointment.DTOs.UserResponseDTO;
+import com.deloitte.service_appointment.Entities.User;
 
 import java.util.List;
 
@@ -13,7 +15,7 @@ public interface UserService {
 
     UserResponseDTO adicionarUser(UserRequestDTO userRequestDTO);
 
-    //UserResponseDTO editarUser(UserRequestDTO userRequestDTO,Long id);
+    UserResponseDTO atualizarPerfil(Long id, UserUpdateDTO dto);
 
     void deletarUser(Long id);
 }
