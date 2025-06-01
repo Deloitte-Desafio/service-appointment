@@ -3,6 +3,7 @@ package com.deloitte.service_appointment.DTOs.Mappers;
 import com.deloitte.service_appointment.DTOs.AgendamentoRequestDTO;
 import com.deloitte.service_appointment.DTOs.AgendamentoResponseDTO;
 import com.deloitte.service_appointment.Entities.Agendamento;
+import com.deloitte.service_appointment.enums.Status;
 
 public class AgendamentoMapper {
 
@@ -31,7 +32,7 @@ public class AgendamentoMapper {
         Agendamento agendamento = new Agendamento();
         agendamento.setDataHoraInicio(requestDTO.getDataHoraInicio());
         agendamento.setDataHoraFim(requestDTO.getDataHoraFim());
-        agendamento.setStatus(requestDTO.getStatus());
+        agendamento.setStatus(Status.AGENDADO);
         return agendamento;
     }
 
