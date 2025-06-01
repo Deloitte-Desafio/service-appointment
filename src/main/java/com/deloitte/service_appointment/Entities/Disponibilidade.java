@@ -1,6 +1,7 @@
 package com.deloitte.service_appointment.Entities;
 
 import com.deloitte.service_appointment.enums.DiaDaSemana;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -32,10 +33,12 @@ public class Disponibilidade {
 
     @NotNull
     @Column(nullable = false)
+    @JsonFormat(pattern = "HH:mm")
     private LocalTime horaInicio;
 
     @NotNull
     @Column(nullable = false)
+    @JsonFormat(pattern = "HH:mm")
     private LocalTime horaFim;
 
     public Disponibilidade(User profissional, DiaDaSemana diaDaSemana, LocalTime horaInicio, LocalTime horaFim) {

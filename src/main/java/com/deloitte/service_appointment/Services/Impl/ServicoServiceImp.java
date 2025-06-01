@@ -45,8 +45,8 @@ public class ServicoServiceImp implements ServicoService {
     @Transactional
     @Override
     public ServicoResponseDTO create(ServicoRequestDTO servicoRequestDTO) {
-        User profissional = userRepository.findById(servicoRequestDTO.getProfissional().getId())
-                .orElseThrow(() -> new EntityNotFoundException("Usuário com id " + servicoRequestDTO.getProfissional().getId() + " não encontrado."));
+        User profissional = userRepository.findById(servicoRequestDTO.getProfissionalId())
+                .orElseThrow(() -> new EntityNotFoundException("Usuário com id " + servicoRequestDTO.getProfissionalId() + " não encontrado."));
         Servico servico = ServicoMapper.toEntity(servicoRequestDTO);
         servico.setProfissional(profissional);
         servico = servicoRepository.save(servico);
@@ -58,8 +58,8 @@ public class ServicoServiceImp implements ServicoService {
     public ServicoResponseDTO update(Long id, ServicoRequestDTO servicoRequestDTO) {
         Servico existingServico = servicoRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Serviço com id " + id + " não encontrado."));
-        User profissional = userRepository.findById(servicoRequestDTO.getProfissional().getId())
-                .orElseThrow(() -> new EntityNotFoundException("Usuário com id " + servicoRequestDTO.getProfissional().getId() + " não encontrado."));
+        User profissional = userRepository.findById(servicoRequestDTO.getProfissionalId())
+                .orElseThrow(() -> new EntityNotFoundException("Usuário com id " + servicoRequestDTO.getProfissionalId() + " não encontrado."));
         ServicoMapper.updateEntity(existingServico, servicoRequestDTO);
         existingServico.setProfissional(profissional);
         Servico updatedServico = servicoRepository.save(existingServico);

@@ -33,6 +33,7 @@ public class AgendamentoServiceImpl implements AgendamentoService {
 
     private static final long HORAS_ANTECEDENCIA_CANCELAMENTO = 48;
 
+
     @Transactional(readOnly = true)
     @Override
     public List<AgendamentoResponseDTO> findAll() {
@@ -68,6 +69,7 @@ public class AgendamentoServiceImpl implements AgendamentoService {
         Agendamento savedAgendamento = agendamentoRepository.save(agendamento);
         return AgendamentoMapper.toDTO(savedAgendamento);
     }
+
     @Transactional
     @Override
     public AgendamentoResponseDTO update(Long id, AgendamentoRequestDTO entity) {
