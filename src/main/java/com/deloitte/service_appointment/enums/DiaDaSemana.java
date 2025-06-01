@@ -2,7 +2,7 @@ package com.deloitte.service_appointment.enums;
 
 public enum DiaDaSemana {
     SEGUNDA,
-    TERÇA,
+    TERCA,
     QUARTA,
     QUINTA,
     SEXTA,

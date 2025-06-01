@@ -21,7 +21,7 @@ public class UserRequestDTO {
     @Size(min = 6, message = "Senha deve ter no mínimo 6 caracteres")
     private String senha;
 
-    @NotBlank(message = "O tipo de usuário é obrigatório")
+    @NotNull(message = "O tipo de usuário é obrigatório")
     private UserType tipoUsuario;
 
 
