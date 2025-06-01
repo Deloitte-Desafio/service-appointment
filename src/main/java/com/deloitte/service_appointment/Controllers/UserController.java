@@ -1,7 +1,9 @@
 package com.deloitte.service_appointment.Controllers;
 
+import com.deloitte.service_appointment.DTOs.User.UserUpdateDTO;
 import com.deloitte.service_appointment.DTOs.UserRequestDTO;
 import com.deloitte.service_appointment.DTOs.UserResponseDTO;
+import com.deloitte.service_appointment.Entities.User;
 import com.deloitte.service_appointment.Services.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +39,13 @@ public class UserController {
     {
         UserResponseDTO userResponseDTO = userService.adicionarUser(userRequestDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(userResponseDTO);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<UserResponseDTO> atualizarPerfil(@PathVariable Long id,@Valid @RequestBody UserUpdateDTO userUpdateDTO)
+    {
+        UserResponseDTO atualizado = userService.atualizarPerfil(id, userUpdateDTO);
+        return ResponseEntity.ok(atualizado);
     }
 
     @DeleteMapping("/{id}")
