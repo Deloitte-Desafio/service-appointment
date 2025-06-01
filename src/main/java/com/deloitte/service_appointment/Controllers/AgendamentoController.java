@@ -1,5 +1,6 @@
 package com.deloitte.service_appointment.Controllers;
 
+import com.deloitte.service_appointment.DTOs.Agendamento.AgendamentoDashboardDTO;
 import com.deloitte.service_appointment.DTOs.AgendamentoRequestDTO;
 import com.deloitte.service_appointment.DTOs.AgendamentoResponseDTO;
 import com.deloitte.service_appointment.Services.AgendamentoService;
@@ -52,5 +53,11 @@ public class AgendamentoController {
     public ResponseEntity<Void> cancelarAgendamento(@PathVariable Long id) {
         agendamentoService.cancelarAgendamentoPorCliente(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/dashboard/cliente/{id}")
+    public ResponseEntity<List<AgendamentoDashboardDTO>> getProximosAgendamentosCliente(@PathVariable Long id) {
+        List<AgendamentoDashboardDTO> agendamentos = agendamentoService.buscarAgendamentosFuturosDoCliente(id);
+        return ResponseEntity.ok(agendamentos);
     }
 }
