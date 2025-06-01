@@ -3,9 +3,11 @@ package com.deloitte.service_appointment.DTOs;
 import com.deloitte.service_appointment.Entities.User;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor

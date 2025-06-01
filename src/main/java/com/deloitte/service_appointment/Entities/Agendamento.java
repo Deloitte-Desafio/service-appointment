@@ -36,11 +36,11 @@ public class Agendamento {
     private Servico servico;
 
     @NotNull
-    @Column(nullable = false)
+    @Column(name = "data_hora_inicio",nullable = false)
     private LocalDateTime dataHoraInicio;
 
     @NotNull
-    @Column(nullable = false)
+    @Column(name = "data_hora_fim",nullable = false)
     private LocalDateTime dataHoraFim;
 
     @NotNull

@@ -36,7 +36,7 @@ public class User {
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name = "tipo_usuario", nullable = false)
     private UserType tipoUsuario;
 
     @OneToMany(mappedBy = "profissional", cascade = CascadeType.ALL, orphanRemoval = true)
