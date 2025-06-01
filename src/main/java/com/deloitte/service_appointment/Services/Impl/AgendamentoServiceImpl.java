@@ -4,7 +4,11 @@ import com.deloitte.service_appointment.DTOs.AgendamentoRequestDTO;
 import com.deloitte.service_appointment.DTOs.AgendamentoResponseDTO;
 import com.deloitte.service_appointment.DTOs.Mappers.AgendamentoMapper;
 import com.deloitte.service_appointment.Entities.Agendamento;
+import com.deloitte.service_appointment.Entities.Servico;
+import com.deloitte.service_appointment.Entities.User;
 import com.deloitte.service_appointment.Repositories.AgendamentoRepository;
+import com.deloitte.service_appointment.Repositories.ServicoRepository;
+import com.deloitte.service_appointment.Repositories.UserRepository;
 import com.deloitte.service_appointment.Services.AgendamentoService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +22,12 @@ public class AgendamentoServiceImpl implements AgendamentoService {
 
     @Autowired
     private AgendamentoRepository agendamentoRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private ServicoRepository servicoRepository;
 
     @Transactional(readOnly = true)
     @Override
@@ -39,10 +49,22 @@ public class AgendamentoServiceImpl implements AgendamentoService {
     @Transactional
     @Override
     public AgendamentoResponseDTO create(AgendamentoRequestDTO entity) {
+
+        User profissional = userRepository.findById(entity.getProfissionalId())
+                .orElseThrow(() -> new RuntimeException("Profissional não encontrado"));
+        Servico servico = servicoRepository.findById(entity.getServicoId())
+                .orElseThrow(() -> new RuntimeException("Serviço não encontrado"));
+        User cliente = userRepository.findById(entity.getClienteId())
+                .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
+
         Agendamento agendamento = AgendamentoMapper.toEntity(entity);
+        agendamento.setProfissional(profissional);
+        agendamento.setServico(servico);
+        agendamento.setCliente(cliente);
         Agendamento savedAgendamento = agendamentoRepository.save(agendamento);
         return AgendamentoMapper.toDTO(savedAgendamento);
     }
+
     @Transactional
     @Override
     public AgendamentoResponseDTO update(Long id, AgendamentoRequestDTO entity) {

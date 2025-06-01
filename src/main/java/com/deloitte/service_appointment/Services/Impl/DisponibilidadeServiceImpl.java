@@ -4,7 +4,9 @@ import com.deloitte.service_appointment.DTOs.DisponibilidadeRequestDTO;
 import com.deloitte.service_appointment.DTOs.DisponibilidadeResponseDTO;
 import com.deloitte.service_appointment.DTOs.Mappers.DisponibilidadeMapper;
 import com.deloitte.service_appointment.Entities.Disponibilidade;
+import com.deloitte.service_appointment.Entities.User;
 import com.deloitte.service_appointment.Repositories.DisponibilidadeRepository;
+import com.deloitte.service_appointment.Repositories.UserRepository;
 import com.deloitte.service_appointment.Services.DisponibilidadeService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,9 @@ public class DisponibilidadeServiceImpl implements DisponibilidadeService {
 
     @Autowired
     private DisponibilidadeRepository disponibilidadeRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Transactional(readOnly = true)
     @Override
@@ -39,7 +44,10 @@ public class DisponibilidadeServiceImpl implements DisponibilidadeService {
     @Transactional
     @Override
     public DisponibilidadeResponseDTO create(DisponibilidadeRequestDTO entity) {
+        User profissional = userRepository.findById(entity.getProfissionalId())
+                .orElseThrow(() -> new EntityNotFoundException("Profissional não encontrado"));
         Disponibilidade disponibilidade = DisponibilidadeMapper.toEntity(entity);
+        disponibilidade.setProfissional(profissional);
         Disponibilidade savedDisponibilidade = disponibilidadeRepository.save(disponibilidade);
         return DisponibilidadeMapper.toDTO(savedDisponibilidade);
     }
