@@ -10,11 +10,13 @@ import com.deloitte.service_appointment.Repositories.AgendamentoRepository;
 import com.deloitte.service_appointment.Repositories.ServicoRepository;
 import com.deloitte.service_appointment.Repositories.UserRepository;
 import com.deloitte.service_appointment.Services.AgendamentoService;
+import com.deloitte.service_appointment.enums.Status;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -28,6 +30,9 @@ public class AgendamentoServiceImpl implements AgendamentoService {
 
     @Autowired
     private ServicoRepository servicoRepository;
+
+    private static final long HORAS_ANTECEDENCIA_CANCELAMENTO = 48;
+
 
     @Transactional(readOnly = true)
     @Override
@@ -81,4 +86,29 @@ public class AgendamentoServiceImpl implements AgendamentoService {
                 .orElseThrow(() -> new EntityNotFoundException("Agendamento não encontrado com id " + id));
         agendamentoRepository.delete(agendamento);
     }
+
+
+
+    @Transactional
+    public void cancelarAgendamentoPorCliente(Long agendamentoId) {
+        Agendamento agendamento = agendamentoRepository.findById(agendamentoId)
+                .orElseThrow(() -> new EntityNotFoundException("Agendamento não encontrado"));
+
+        if (agendamento.getStatus() == Status.CANCELADO_CLIENTE) {
+            throw new IllegalStateException("Agendamento já está cancelado pelo cliente");
+        }
+
+        LocalDateTime agora = LocalDateTime.now();
+        LocalDateTime horarioLimiteCancelamento = agendamento.getDataHoraInicio().minusHours(HORAS_ANTECEDENCIA_CANCELAMENTO);
+
+        if (agora.isAfter(horarioLimiteCancelamento)) {
+            throw new IllegalStateException("Não é possível cancelar o agendamento com menos de "
+                    + HORAS_ANTECEDENCIA_CANCELAMENTO + " horas de antecedência");
+        }
+
+        agendamento.setStatus(Status.CANCELADO_CLIENTE);
+        agendamentoRepository.save(agendamento);
+    }
+
+
 }

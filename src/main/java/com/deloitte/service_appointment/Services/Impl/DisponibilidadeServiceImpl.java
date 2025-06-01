@@ -50,6 +50,7 @@ public class DisponibilidadeServiceImpl implements DisponibilidadeService {
         disponibilidade.setProfissional(profissional);
         Disponibilidade savedDisponibilidade = disponibilidadeRepository.save(disponibilidade);
         return DisponibilidadeMapper.toDTO(savedDisponibilidade);
+
     }
 
     @Override
