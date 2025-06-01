@@ -1,5 +1,6 @@
 package com.deloitte.service_appointment.Services.Impl;
 
+import com.deloitte.service_appointment.DTOs.Agendamento.AgendamentoDashboardDTO;
 import com.deloitte.service_appointment.DTOs.AgendamentoRequestDTO;
 import com.deloitte.service_appointment.DTOs.AgendamentoResponseDTO;
 import com.deloitte.service_appointment.DTOs.Mappers.AgendamentoMapper;
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class AgendamentoServiceImpl implements AgendamentoService {
@@ -108,6 +110,25 @@ public class AgendamentoServiceImpl implements AgendamentoService {
 
         agendamento.setStatus(Status.CANCELADO_CLIENTE);
         agendamentoRepository.save(agendamento);
+    }
+
+    @Override
+    public List<AgendamentoDashboardDTO> buscarAgendamentosFuturosDoCliente(Long clienteId) {
+        User cliente = userRepository.findById(clienteId)
+                .orElseThrow(() -> new EntityNotFoundException("Cliente não encontrado"));
+
+        List<Agendamento> agendamentos = agendamentoRepository
+                .findByClienteAndDataHoraInicioAfter(cliente, LocalDateTime.now());
+
+        return agendamentos.stream()
+                .map(agendamento -> new AgendamentoDashboardDTO(
+                        agendamento.getId(),
+                        agendamento.getProfissional().getNome(),
+                        agendamento.getServico().getNome(),
+                        agendamento.getDataHoraInicio(),
+                        agendamento.getDataHoraFim()
+                ))
+                .collect(Collectors.toList());
     }
 
 
