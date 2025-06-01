@@ -33,7 +33,7 @@ public class AgendamentoServiceImpl implements AgendamentoService {
     @Autowired
     private ServicoRepository servicoRepository;
 
-    private static final long HORAS_ANTECEDENCIA_CANCELAMENTO = 48;
+    private static final long HORAS_ANTECEDENCIA_CANCELAMENTO = 24;
 
 
     @Transactional(readOnly = true)

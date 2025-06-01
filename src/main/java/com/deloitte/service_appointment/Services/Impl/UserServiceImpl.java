@@ -28,28 +28,32 @@ public class UserServiceImpl implements UserService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<UserResponseDTO> listarUser() {
+    public List<UserResponseDTO> findAll() {
         List<User> users = userRepository.findAll();
         return users.stream().map(UserMapper::toDTO).toList();
     }
 
     @Transactional(readOnly = true)
     @Override
-    public UserResponseDTO encontrarUser(Long id) {
+    public UserResponseDTO findById(Long id) {
         User user = userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Cliente com id " + id + " não encontrado."));
         return toDTO(user);
     }
 
     @Transactional
     @Override
-    public UserResponseDTO adicionarUser(UserRequestDTO userRequestDTO) {
+    public UserResponseDTO create(UserRequestDTO userRequestDTO) {
         User user = UserMapper.toEntity(userRequestDTO);
+        if (user.getSenha() != null && !user.getSenha().isEmpty()) {
+            user.setSenha(passwordEncoder.encode(user.getSenha()));
+        }
         user = userRepository.save(user);
         return toDTO(user);
     }
 
+
     @Transactional
-    public UserResponseDTO atualizarPerfil(Long userId, UserUpdateDTO dto) {
+    public UserResponseDTO update(Long userId, UserRequestDTO dto) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
@@ -64,8 +68,8 @@ public class UserServiceImpl implements UserService {
             user.setNome(dto.getNome());
         }
 
-        if (dto.getNovaSenha() != null && !dto.getNovaSenha().isEmpty()) {
-            user.setSenha(passwordEncoder.encode(dto.getNovaSenha()));
+        if (dto.getSenha() != null && !dto.getSenha().isEmpty()) {
+            user.setSenha(passwordEncoder.encode(dto.getSenha()));
         }
 
         User userAtualizado = userRepository.save(user);
@@ -78,7 +82,7 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void deletarUser(Long id) {
+    public void delete(Long id) {
         userRepository.deleteById(id);
     }
 }
