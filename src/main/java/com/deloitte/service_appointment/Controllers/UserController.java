@@ -1,14 +1,18 @@
 package com.deloitte.service_appointment.Controllers;
 
-import com.deloitte.service_appointment.DTOs.User.UserUpdateDTO;
+import com.deloitte.service_appointment.DTOs.AuthenticationDTO;
+import com.deloitte.service_appointment.DTOs.LoginResponseDTO;
 import com.deloitte.service_appointment.DTOs.UserRequestDTO;
 import com.deloitte.service_appointment.DTOs.UserResponseDTO;
 import com.deloitte.service_appointment.Entities.User;
 import com.deloitte.service_appointment.Services.UserService;
+import com.deloitte.service_appointment.config.TokenService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,7 +22,13 @@ import java.util.List;
 public class UserController {
 
     @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
     private UserService userService;
+
+    @Autowired
+    private TokenService tokenService;
 
     @GetMapping()
     public ResponseEntity<List<UserResponseDTO>> findAll()
@@ -33,6 +43,17 @@ public class UserController {
         UserResponseDTO userResponseDTO = userService.findById(id);
         return ResponseEntity.ok(userResponseDTO);
     }
+    @PostMapping("/login")
+    public ResponseEntity login (@RequestBody @Valid AuthenticationDTO dto)
+    {
+        var usernamePassword = new UsernamePasswordAuthenticationToken(dto.getEmail(),dto.getSenha());
+        var auth = this.authenticationManager.authenticate(usernamePassword);
+
+        var token = tokenService.generateToken((User) auth.getPrincipal());
+
+        return ResponseEntity.ok(new LoginResponseDTO(token));
+    }
+
 
     @PostMapping
     public ResponseEntity<UserResponseDTO> createUser(@RequestBody @Valid UserRequestDTO userRequestDTO)
