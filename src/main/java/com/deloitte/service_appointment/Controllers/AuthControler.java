@@ -2,17 +2,22 @@ package com.deloitte.service_appointment.Controllers;
 
 import com.deloitte.service_appointment.DTOs.AuthenticationDTO;
 import com.deloitte.service_appointment.DTOs.LoginResponseDTO;
+import com.deloitte.service_appointment.DTOs.Mappers.UserMapper;
+import com.deloitte.service_appointment.DTOs.UserResponseDTO;
 import com.deloitte.service_appointment.Entities.User;
+import com.deloitte.service_appointment.Repositories.UserRepository;
+import com.deloitte.service_appointment.Services.Impl.AuthorizationService;
+import com.deloitte.service_appointment.Services.UserService;
 import com.deloitte.service_appointment.config.TokenService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
@@ -24,6 +29,18 @@ public class AuthControler {
 
     @Autowired
     private TokenService tokenService;
+
+    @Autowired
+    private AuthorizationService authorizationService;
+
+
+
+    @GetMapping()
+    public ResponseEntity<?> getCurrentUser(@AuthenticationPrincipal UserDetails userDetails) {
+        UserResponseDTO dto = authorizationService.getLoggedUser(userDetails.getUsername());
+        return ResponseEntity.ok(dto);
+    }
+
 
 
     @PostMapping("/login")
