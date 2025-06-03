@@ -62,7 +62,6 @@ public class AgendamentoController {
         return ResponseEntity.noContent().build();
     }
 
-    @PreAuthorize("hasRole('CLIENTE')")
     @GetMapping("/dashboard/cliente/{id}")
     public ResponseEntity<List<AgendamentoDashboardDTO>> getProximosAgendamentosCliente(@PathVariable Long id) {
         List<AgendamentoDashboardDTO> agendamentos = agendamentoService.buscarAgendamentosFuturosDoCliente(id);
