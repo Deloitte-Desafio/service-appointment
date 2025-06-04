@@ -54,4 +54,11 @@ public class ServiceController {
         servicoService.delete(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/profissional/{id}")
+    @PreAuthorize("hasRole('PROFISSIONAL')")
+    public ResponseEntity<List<ServicoResponseDTO>> getServicesByProfessional(@PathVariable Long id) {
+        List<ServicoResponseDTO> services = servicoService.findByProfessionalId(id);
+        return ResponseEntity.ok(services);
+    }
 }

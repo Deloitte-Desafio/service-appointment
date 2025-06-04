@@ -8,12 +8,14 @@ import com.deloitte.service_appointment.Entities.User;
 import com.deloitte.service_appointment.Repositories.ServicoRepository;
 import com.deloitte.service_appointment.Repositories.UserRepository;
 import com.deloitte.service_appointment.Services.ServicoService;
+import com.deloitte.service_appointment.Services.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ServicoServiceImp implements ServicoService {
@@ -24,6 +26,9 @@ public class ServicoServiceImp implements ServicoService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private UserService userService;
 
     @Transactional(readOnly = true)
     @Override
@@ -73,5 +78,14 @@ public class ServicoServiceImp implements ServicoService {
             throw new EntityNotFoundException("Serviço com id " + id + " não encontrado.");
         }
         servicoRepository.deleteById(id);
+    }
+    @Transactional
+    @Override
+    public List<ServicoResponseDTO> findByProfessionalId(Long profissionalId) {
+        userService.findById(profissionalId);
+        List<Servico> servicos = servicoRepository.findByProfissionalId(profissionalId);
+        return servicos.stream()
+                .map(ServicoMapper::toDTO)
+                .collect(Collectors.toList());
     }
 }
