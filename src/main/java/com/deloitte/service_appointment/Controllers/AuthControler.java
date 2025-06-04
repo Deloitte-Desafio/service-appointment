@@ -3,6 +3,7 @@ package com.deloitte.service_appointment.Controllers;
 import com.deloitte.service_appointment.DTOs.AuthenticationDTO;
 import com.deloitte.service_appointment.DTOs.LoginResponseDTO;
 import com.deloitte.service_appointment.DTOs.Mappers.UserMapper;
+import com.deloitte.service_appointment.DTOs.UserRequestDTO;
 import com.deloitte.service_appointment.DTOs.UserResponseDTO;
 import com.deloitte.service_appointment.Entities.User;
 import com.deloitte.service_appointment.Repositories.UserRepository;
@@ -33,7 +34,8 @@ public class AuthControler {
     @Autowired
     private AuthorizationService authorizationService;
 
-
+    @Autowired
+    private UserService userService;
 
     @GetMapping()
     public ResponseEntity<?> getCurrentUser(@AuthenticationPrincipal UserDetails userDetails) {
@@ -52,6 +54,15 @@ public class AuthControler {
         var token = tokenService.generateToken((User) auth.getPrincipal());
 
         return ResponseEntity.ok(new LoginResponseDTO(token));
+    }
+
+
+
+    @PostMapping("/register")
+    public ResponseEntity<UserResponseDTO> createUser(@RequestBody @Valid UserRequestDTO userRequestDTO)
+    {
+        UserResponseDTO userResponseDTO = userService.create(userRequestDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(userResponseDTO);
     }
 
 }

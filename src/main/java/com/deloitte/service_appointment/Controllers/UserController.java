@@ -43,12 +43,6 @@ public class UserController {
     }
 
 
-    @PostMapping
-    public ResponseEntity<UserResponseDTO> createUser(@RequestBody @Valid UserRequestDTO userRequestDTO)
-    {
-        UserResponseDTO userResponseDTO = userService.create(userRequestDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(userResponseDTO);
-    }
 
     @PreAuthorize("hasRole('CLIENTE') or hasRole('PROFISSIONAL')")
     public ResponseEntity<UserResponseDTO> atualizarPerfil(@PathVariable Long id,@Valid @RequestBody UserRequestDTO userRequestDTO)
