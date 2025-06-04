@@ -11,7 +11,8 @@ INSERT INTO tb_user (nome, email, senha, tipo_usuario) VALUES
 INSERT INTO tb_servico (nome, descricao, duracao_minutos, profissional_id) VALUES
 ('Tintura de Cabelo', 'Coloração completa', 90, 2),
 ('Limpeza de Pele', 'Limpeza facial profunda', 60, 3),
-('Escova Modelada', 'Escova com modelagem', 45, 3);
+('Escova Modelada', 'Escova com modelagem', 45, 3),
+('Debugger', 'Debuggar código é uma beleza', 30, 6);
 
 INSERT INTO tb_disponibilidade (profissional_id, dia_da_semana, hora_inicio, hora_fim) VALUES
 (2, 'SEGUNDA', '09:00:00', '12:00:00'),

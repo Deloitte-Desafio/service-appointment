@@ -4,7 +4,9 @@ import com.deloitte.service_appointment.DTOs.ServicoRequestDTO;
 import com.deloitte.service_appointment.DTOs.ServicoResponseDTO;
 import com.deloitte.service_appointment.Entities.Servico;
 import com.deloitte.service_appointment.Entities.User;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ServicoMapper {
 
     public static ServicoResponseDTO toDTO(Servico servico) {
