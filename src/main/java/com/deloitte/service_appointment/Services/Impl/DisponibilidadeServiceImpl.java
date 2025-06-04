@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class DisponibilidadeServiceImpl implements DisponibilidadeService {
@@ -70,5 +71,12 @@ public class DisponibilidadeServiceImpl implements DisponibilidadeService {
         }
         disponibilidadeRepository.deleteById(id);
 
+    }
+    @Override
+    public List<DisponibilidadeResponseDTO> getAvailabilitiesByProfessionalId(Long proId) {
+        List<Disponibilidade> disponibilidades = disponibilidadeRepository.findByProfissionalId(proId);
+        return disponibilidades.stream()
+                .map(DisponibilidadeMapper::toDTO)
+                .collect(Collectors.toList());
     }
 }
