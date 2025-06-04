@@ -53,4 +53,10 @@ public class DisponibilidadeController {
         disponibilidadeService.delete(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/profissional/{proId}")
+    public ResponseEntity<List<DisponibilidadeResponseDTO>> getProfessionalAvailabilities(@PathVariable Long proId) {
+        List<DisponibilidadeResponseDTO> availabilities = disponibilidadeService.getAvailabilitiesByProfessionalId(proId);
+        return ResponseEntity.ok(availabilities);
+    }
 }
