@@ -124,11 +124,33 @@ public class AgendamentoServiceImpl implements AgendamentoService {
                 .map(agendamento -> new AgendamentoDashboardDTO(
                         agendamento.getId(),
                         agendamento.getProfissional().getNome(),
+                        agendamento.getCliente().getNome(),
                         agendamento.getServico().getNome(),
                         agendamento.getDataHoraInicio(),
-                        agendamento.getDataHoraFim()
+                        agendamento.getDataHoraFim(),
+                        agendamento.getStatus().name()
                 ))
                 .collect(Collectors.toList());
+    }
+
+    public List<AgendamentoDashboardDTO> buscarAgendamentosFuturosDoProfissional(Long profissionalId) {
+        LocalDateTime now = LocalDateTime.now();
+        List<Agendamento> agendamentos = agendamentoRepository.findByProfissionalIdAndDataHoraInicioAfter(profissionalId, now);
+        return agendamentos.stream()
+                .map(this::convertToDashboardDTO)
+                .collect(Collectors.toList());
+    }
+
+    private AgendamentoDashboardDTO convertToDashboardDTO(Agendamento agendamento) {
+        AgendamentoDashboardDTO dto = new AgendamentoDashboardDTO();
+        dto.setId(agendamento.getId());
+        dto.setCliente(agendamento.getCliente().getNome());
+        dto.setServico(agendamento.getServico().getNome());
+        dto.setProfissional(agendamento.getProfissional().getNome());
+        dto.setDataHoraInicio(agendamento.getDataHoraInicio());
+        dto.setDataHoraFim(agendamento.getDataHoraFim());
+        dto.setStatus(agendamento.getStatus().name());
+        return dto;
     }
 
 

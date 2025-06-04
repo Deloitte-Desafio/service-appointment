@@ -10,4 +10,5 @@ public interface AgendamentoService extends CrudService<Long, AgendamentoRespons
 
     void cancelarAgendamentoPorCliente(Long agendamentoId);
      List<AgendamentoDashboardDTO> buscarAgendamentosFuturosDoCliente(Long clienteId);
+     List<AgendamentoDashboardDTO> buscarAgendamentosFuturosDoProfissional(Long profissionalId);
 }

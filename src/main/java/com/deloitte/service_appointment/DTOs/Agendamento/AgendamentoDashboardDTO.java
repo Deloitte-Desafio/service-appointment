@@ -13,7 +13,9 @@ import java.time.LocalDateTime;
 public class AgendamentoDashboardDTO {
     private Long id;
     private String nomeProfissional;
+    private String nomeCliente;
     private String nomeServico;
     private LocalDateTime dataHoraInicio;
     private LocalDateTime dataHoraFim;
+    private String status;
 }
