@@ -33,7 +33,11 @@ public class AgendamentoServiceImpl implements AgendamentoService {
     @Autowired
     private ServicoRepository servicoRepository;
 
+    @Autowired
+    private AgendamentoMapper mapper;
+
     private static final long HORAS_ANTECEDENCIA_CANCELAMENTO = 24;
+
 
 
     @Transactional(readOnly = true)
@@ -121,15 +125,7 @@ public class AgendamentoServiceImpl implements AgendamentoService {
                 .findByClienteAndDataHoraInicioAfter(cliente, LocalDateTime.now());
 
         return agendamentos.stream()
-                .map(agendamento -> new AgendamentoDashboardDTO(
-                        agendamento.getId(),
-                        agendamento.getProfissional().getNome(),
-                        agendamento.getCliente().getNome(),
-                        agendamento.getServico().getNome(),
-                        agendamento.getDataHoraInicio(),
-                        agendamento.getDataHoraFim(),
-                        agendamento.getStatus().name()
-                ))
+                .map(mapper::convertToDashboardDTO)
                 .collect(Collectors.toList());
     }
 
@@ -137,21 +133,8 @@ public class AgendamentoServiceImpl implements AgendamentoService {
         LocalDateTime now = LocalDateTime.now();
         List<Agendamento> agendamentos = agendamentoRepository.findByProfissionalIdAndDataHoraInicioAfter(profissionalId, now);
         return agendamentos.stream()
-                .map(this::convertToDashboardDTO)
+                .map(mapper::convertToDashboardDTO)
                 .collect(Collectors.toList());
     }
-
-    private AgendamentoDashboardDTO convertToDashboardDTO(Agendamento agendamento) {
-        AgendamentoDashboardDTO dto = new AgendamentoDashboardDTO();
-        dto.setId(agendamento.getId());
-        dto.setCliente(agendamento.getCliente().getNome());
-        dto.setServico(agendamento.getServico().getNome());
-        dto.setProfissional(agendamento.getProfissional().getNome());
-        dto.setDataHoraInicio(agendamento.getDataHoraInicio());
-        dto.setDataHoraFim(agendamento.getDataHoraFim());
-        dto.setStatus(agendamento.getStatus().name());
-        return dto;
-    }
-
 
 }
