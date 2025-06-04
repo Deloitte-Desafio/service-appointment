@@ -61,4 +61,11 @@ public class AgendamentoController {
         List<AgendamentoDashboardDTO> agendamentos = agendamentoService.buscarAgendamentosFuturosDoCliente(id);
         return ResponseEntity.ok(agendamentos);
     }
+
+    @GetMapping("/dashboard/profissional/{id}")
+    @PreAuthorize("hasRole('PROFISSIONAL')")
+    public ResponseEntity<List<AgendamentoDashboardDTO>> getProximosAgendamentosProfissional(@PathVariable Long id) {
+        List<AgendamentoDashboardDTO> agendamentos = agendamentoService.buscarAgendamentosFuturosDoProfissional(id);
+        return ResponseEntity.ok(agendamentos);
+    }
 }
