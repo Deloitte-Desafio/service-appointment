@@ -68,4 +68,25 @@ public class AgendamentoController {
         List<AgendamentoDashboardDTO> agendamentos = agendamentoService.buscarAgendamentosFuturosDoProfissional(id);
         return ResponseEntity.ok(agendamentos);
     }
+
+    @GetMapping("/profissional/{id}")
+    @PreAuthorize("hasRole('PROFISSIONAL')")
+    public ResponseEntity<List<AgendamentoDashboardDTO>> getAgendamentosProfissional(@PathVariable Long id) {
+        List<AgendamentoDashboardDTO> agendamentos = agendamentoService.buscarAgendamentosProfissional(id);
+        return ResponseEntity.ok(agendamentos);
+    }
+
+    @PutMapping("/{id}/cancelar")
+    @PreAuthorize("hasRole('PROFISSIONAL')")
+    public ResponseEntity<Void> cancelarAgendamentoPorProfissional(@PathVariable Long id) {
+        agendamentoService.cancelarAgendamentoPorProfissional(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{id}/concluir")
+    @PreAuthorize("hasRole('PROFISSIONAL')")
+    public ResponseEntity<Void> completarAgendamentoProfissional(@PathVariable Long id){
+        agendamentoService.completarAgendamentoProfissional(id);
+        return ResponseEntity.noContent().build();
+    }
 }

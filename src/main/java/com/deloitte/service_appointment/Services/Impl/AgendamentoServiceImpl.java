@@ -96,6 +96,7 @@ public class AgendamentoServiceImpl implements AgendamentoService {
 
 
     @Transactional
+    @Override
     public void cancelarAgendamentoPorCliente(Long agendamentoId) {
         Agendamento agendamento = agendamentoRepository.findById(agendamentoId)
                 .orElseThrow(() -> new EntityNotFoundException("Agendamento não encontrado"));
@@ -129,12 +130,50 @@ public class AgendamentoServiceImpl implements AgendamentoService {
                 .collect(Collectors.toList());
     }
 
+    @Override
     public List<AgendamentoDashboardDTO> buscarAgendamentosFuturosDoProfissional(Long profissionalId) {
         LocalDateTime now = LocalDateTime.now();
         List<Agendamento> agendamentos = agendamentoRepository.findByProfissionalIdAndDataHoraInicioAfter(profissionalId, now);
         return agendamentos.stream()
                 .map(mapper::convertToDashboardDTO)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<AgendamentoDashboardDTO> buscarAgendamentosProfissional(Long profissionalId) {
+        List<Agendamento> agendamentos = agendamentoRepository.findByProfissionalId(profissionalId);
+        return agendamentos.stream()
+                .map(mapper::convertToDashboardDTO)
+                .collect(Collectors.toList());
+    }
+    @Override
+    public void cancelarAgendamentoPorProfissional(Long agendamentoId) {
+        Agendamento agendamento = agendamentoRepository.findById(agendamentoId)
+                .orElseThrow(() -> new EntityNotFoundException("Agendamento não encontrado"));
+
+        if (agendamento.getStatus() == Status.CANCELADO_CLIENTE) {
+            throw new IllegalStateException("Agendamento já está cancelado pelo cliente");
+        }else if(agendamento.getStatus() == Status.CONCLUIDO){
+            throw  new IllegalStateException("Agendamento já foi concluído");
+        }
+
+        agendamento.setStatus(Status.CANCELADO_PROFISSIONAL);
+        agendamentoRepository.save(agendamento);
+    }
+
+    @Override
+    public void completarAgendamentoProfissional(Long agendamentoId) {
+        Agendamento agendamento = agendamentoRepository.findById(agendamentoId)
+                .orElseThrow(() -> new EntityNotFoundException("Agendamento não encontrado"));
+
+        if (agendamento.getStatus() == Status.CANCELADO_CLIENTE) {
+            throw new IllegalStateException("Agendamento já está cancelado pelo cliente");
+        }else if(agendamento.getStatus() == Status.CANCELADO_PROFISSIONAL){
+            throw  new IllegalStateException("Você já cancelou o agendamento");
+        }
+
+        agendamento.setStatus(Status.CONCLUIDO);
+        agendamentoRepository.save(agendamento);
     }
 
 }
