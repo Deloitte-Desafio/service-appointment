@@ -27,7 +27,7 @@ public class UserController {
     private UserService userService;
 
 
-    @PreAuthorize("hasRole('CLIENTE') or hasRole('PROFISSIONAL')")
+
     @GetMapping()
     public ResponseEntity<List<UserResponseDTO>> findAll()
     {
@@ -35,7 +35,7 @@ public class UserController {
         return ResponseEntity.ok(users);
     }
 
-    @PreAuthorize("hasRole('CLIENTE') or hasRole('PROFISSIONAL')")
+
     public ResponseEntity<UserResponseDTO> findById(@PathVariable Long id)
     {
         UserResponseDTO userResponseDTO = userService.findById(id);
@@ -44,14 +44,14 @@ public class UserController {
 
 
 
-    @PreAuthorize("hasRole('CLIENTE') or hasRole('PROFISSIONAL')")
+
     public ResponseEntity<UserResponseDTO> atualizarPerfil(@PathVariable Long id,@Valid @RequestBody UserRequestDTO userRequestDTO)
     {
         UserResponseDTO atualizado = userService.update(id, userRequestDTO);
         return ResponseEntity.ok(atualizado);
     }
 
-    @PreAuthorize("hasRole('CLIENTE') or hasRole('PROFISSIONAL')")
+
     public ResponseEntity <UserResponseDTO> deleteUser(@PathVariable Long id)
     {
         userService.delete(id);

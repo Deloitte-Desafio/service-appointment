@@ -20,42 +20,36 @@ public class AgendamentoController {
     @Autowired
     private AgendamentoService agendamentoService;
 
-    @PreAuthorize("hasRole('CLIENTE')")
     @GetMapping
     public ResponseEntity<List<AgendamentoResponseDTO>> findAll() {
         List<AgendamentoResponseDTO> agendamentos = agendamentoService.findAll();
         return ResponseEntity.ok(agendamentos);
     }
 
-    @PreAuthorize("hasRole('CLIENTE')")
     @GetMapping("/{id}")
     public ResponseEntity<AgendamentoResponseDTO> findById(@PathVariable Long id) {
         AgendamentoResponseDTO agendamentoResponseDTO = agendamentoService.findById(id);
         return ResponseEntity.ok(agendamentoResponseDTO);
     }
 
-    @PreAuthorize("hasRole('CLIENTE')")
     @PostMapping
     public ResponseEntity<AgendamentoResponseDTO> create(@RequestBody @Valid AgendamentoRequestDTO agendamentoRequestDTO) {
         AgendamentoResponseDTO agendamentoResponseDTO = agendamentoService.create(agendamentoRequestDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(agendamentoResponseDTO);
     }
 
-    @PreAuthorize("hasRole('CLIENTE')")
     @PutMapping("/{id}")
     public ResponseEntity<AgendamentoResponseDTO> update(@PathVariable Long id, @RequestBody @Valid AgendamentoRequestDTO agendamentoRequestDTO) {
         AgendamentoResponseDTO agendamentoResponseDTO = agendamentoService.update(id, agendamentoRequestDTO);
         return ResponseEntity.ok(agendamentoResponseDTO);
     }
 
-    @PreAuthorize("hasRole('CLIENTE')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         agendamentoService.delete(id);
         return ResponseEntity.noContent().build();
     }
 
-    @PreAuthorize("hasRole('CLIENTE')")
     @DeleteMapping("/{id}/cancelar")
     public ResponseEntity<Void> cancelarAgendamento(@PathVariable Long id) {
         agendamentoService.cancelarAgendamentoPorCliente(id);
