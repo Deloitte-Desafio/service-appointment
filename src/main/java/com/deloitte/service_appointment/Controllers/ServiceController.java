@@ -20,8 +20,8 @@ public class ServiceController {
     private ServicoService servicoService;
 
 
-
     @GetMapping
+    @PreAuthorize("hasRole('CLIENTE') or hasRole('PROFISSIONAL')")
     public ResponseEntity<List<ServicoResponseDTO>> findAll() {
         List<ServicoResponseDTO> servicos = servicoService.findAll();
         return ResponseEntity.ok(servicos);
@@ -29,6 +29,7 @@ public class ServiceController {
 
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('CLIENTE') or hasRole('PROFISSIONAL')")
     public ResponseEntity<ServicoResponseDTO> findById(@PathVariable Long id) {
         ServicoResponseDTO servicoResponseDTO = servicoService.findById(id);
         return ResponseEntity.ok(servicoResponseDTO);
@@ -36,6 +37,7 @@ public class ServiceController {
 
 
     @PostMapping
+    @PreAuthorize("hasRole('PROFISSIONAL')")
     public ResponseEntity<ServicoResponseDTO> create(@RequestBody @Valid ServicoRequestDTO servicoRequestDTO) {
         ServicoResponseDTO servicoResponseDTO = servicoService.create(servicoRequestDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(servicoResponseDTO);
@@ -43,6 +45,7 @@ public class ServiceController {
 
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('PROFISSIONAL')")
     public ResponseEntity<ServicoResponseDTO> update(@PathVariable Long id, @RequestBody @Valid ServicoRequestDTO servicoRequestDTO) {
         ServicoResponseDTO servicoResponseDTO = servicoService.update(id, servicoRequestDTO);
         return ResponseEntity.ok(servicoResponseDTO);
@@ -50,6 +53,7 @@ public class ServiceController {
 
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('PROFISSIONAL')")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         servicoService.delete(id);
         return ResponseEntity.noContent().build();
