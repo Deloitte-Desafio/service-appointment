@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -57,9 +58,10 @@ public class AgendamentoServiceImpl implements AgendamentoService {
         return AgendamentoMapper.toDTO(agendamento);
     }
 
-    @Transactional
     @Override
     public AgendamentoResponseDTO create(AgendamentoRequestDTO entity) {
+
+        validateHorarios(entity.getDataHoraInicio(), entity.getDataHoraFim());
 
         User profissional = userRepository.findById(entity.getProfissionalId())
                 .orElseThrow(() -> new RuntimeException("Profissional não encontrado"));
@@ -174,6 +176,24 @@ public class AgendamentoServiceImpl implements AgendamentoService {
 
         agendamento.setStatus(Status.CONCLUIDO);
         agendamentoRepository.save(agendamento);
+    }
+
+    private void validateHorarios(LocalDateTime dataHoraInicio, LocalDateTime dataHoraFim) {
+
+        if (dataHoraInicio.isBefore(LocalDateTime.now())) {
+            throw new IllegalArgumentException("A data e hora de início não podem estar no passado");
+        }
+
+
+        if (dataHoraFim.isBefore(dataHoraInicio) || dataHoraFim.isEqual(dataHoraInicio)) {
+            throw new IllegalArgumentException("A data e hora de fim devem ser posteriores à data e hora de início");
+        }
+
+
+        Duration duration = Duration.between(dataHoraInicio, dataHoraFim);
+        if (duration.toHours() < 1) {
+            throw new IllegalArgumentException("O agendamento deve ter duração mínima de 1 hora");
+        }
     }
 
 }
